@@ -19,8 +19,9 @@
 | 04 | Drift Detection | ✅ Hoàn thành | 15/15 |
 | 05 | Cross-Day Integration | ✅ Hoàn thành | 10/10 |
 | Bonus | AgentOps | ✅ Hoàn thành | +10 |
-| Bonus | eBPF / Langfuse | ⬜ Chưa làm | 0/20 |
-| **Tổng** | | **6/7 tracks + 1 bonus** | **110/130** ✅ |
+| Bonus | eBPF Profiling | ✅ Hoàn thành | +10 |
+| Bonus | Langfuse | ⬜ Chưa làm | 0/10 |
+| **Tổng** | | **6/7 tracks + 2 bonus** | **120/130** ✅ |
 
 ### Screenshots đã có trong submission/
 
@@ -37,6 +38,7 @@
 | `cross-day-dashboard.png` | ✅ |
 | `jaeger-trace.png` | ✅ |
 | `agentops-jaeger.png` | ✅ |
+| `pyroscope-flamegraph.png` | ✅ |
 
 ### ✅ Tất cả screenshots đã hoàn thành
 

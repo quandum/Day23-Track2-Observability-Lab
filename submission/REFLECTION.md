@@ -20,7 +20,8 @@
 | 05 — Cross-Day Integration | ✅ | 10/10 | Day 19 + 20 stubs, 6-panel dashboard |
 | **Total Core** | | **100/100** | ✅ **HOÀN THÀNH** |
 | Bonus (AgentOps) | ✅ | +10/10 | 4 tasks, 3 failure modes, wrong-tool extension |
-| Bonus (eBPF/Langfuse) | ⬜ | 0/20 | Optional |
+| Bonus (eBPF Profiling) | ✅ | +10/10 | Pyroscope flame graph for day23-app |
+| Bonus (Langfuse) | ⬜ | 0/10 | Optional |
 
 ### ✅ Tất cả đã hoàn thành — sẵn sàng `make verify`
 
