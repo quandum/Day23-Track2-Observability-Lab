@@ -61,6 +61,7 @@
 - [10. Bonus Tracks (optional, +30 điểm)](#10-bonus-tracks-optional-30-điểm)
 - [11. Timeline tổng thể](#11-timeline-tổng-thể)
 - [12. Troubleshooting Checklist](#12-troubleshooting-checklist)
+- [13. BONUS CHALLENGE — Observe thật (Ungraded)](#13-bonus-challenge--observe-một-thứ-thật-ungraded-4-8htrack)
 
 ---
 
@@ -610,6 +611,141 @@ make verify    # python3 scripts/verify.py
 | 3 dashboards not found | Restart Grafana, đợi 30s |
 | drift-summary.json missing | Chạy `make drift` |
 | REFLECTION.md < 500 chars | Hoàn thiện các section |
+
+---
+
+## 13. BONUS CHALLENGE — Observe một thứ thật (UNGRADED, 4-8h/track)
+
+> Tham khảo: [`BONUS-CHALLENGE.md`](BONUS-CHALLENGE.md)  
+> Mục tiêu: Chĩa observability stack vào một thứ bạn thật sự quan tâm — portfolio piece thực, không phải lab tô màu.
+
+### 13.1 Tổng quan 5 provocations
+
+| # | Provocation | Effort | Output chính |
+|:-:|:------------|:------:|:-------------|
+| 1 | **Gắn telemetry vào lab cũ** (Day 18/19/20) | 4-6h | Dashboard JSON + 1 SLO alert + RUNBOOK.md |
+| 2 | **Observe doanh nghiệp Việt dùng AI** | 6-8h | 2 dashboards, 2 alerts, webhook dịch alert → TV |
+| 3 | **Drift detection trên dataset Việt thật** | 6-8h | Pipeline drift + dashboard + alert + reflection |
+| 4 | **Cost observability model thật** | 4-6h | `$/request`, `$/day`, budget alert, top-3 cost endpoint |
+| 5 | **Diễn tập postmortem (chaos)** | 6-8h | 3 chaos scripts + 3 postmortems + 1 dashboard change |
+
+### 13.2 Provocation 1 — Gắn telemetry vào lab cũ ⭐ (Khuyến nghị)
+
+**Lý do chọn:** Đã build 6 ngày lab trước, có sẵn code, chỉ cần thêm OTel instrumentation.
+
+| Bước | Hành động | Thời gian |
+|:----:|:----------|:---------:|
+| 1.1 | Chọn 1 lab cũ (Day 19 Qdrant hoặc Day 20 llama.cpp) | 15min |
+| 1.2 | Thêm OTel instrumentation (~30 dòng) | 1h |
+| 1.3 | Tạo dashboard `dashboards/<tên-ngày>.json` | 1.5h |
+| 1.4 | Define 1 SLO + 1 multi-burn-rate alert | 1h |
+| 1.5 | Viết `RUNBOOK.md` (~150 từ) | 30min |
+| 1.6 | Demo: trigger failure → alert fire < 5 phút | 1h |
+
+**Deliverables:**
+- `bonus/telemetry-<ngày>/` folder
+- Dashboard JSON đã commit
+- Alert rule trong `prometheus/rules/`
+- `RUNBOOK.md`
+
+**Câu hỏi brainstorm:**
+- 3 metrics nào bạn xem đầu tiên khi có incident?
+- Failure mode không hiển nhiên mà default alert không bắt?
+- Có thể bắt failure sớm hơn 10 phút nếu đổi burn-rate window không?
+
+---
+
+### 13.3 Provocation 2 — Observe doanh nghiệp Việt dùng AI
+
+| Bước | Hành động | Thời gian |
+|:----:|:----------|:---------:|
+| 2.1 | Chọn 1 business case cụ thể (chatbot, OCR, auto-reply...) | 30min |
+| 2.2 | Viết `bonus/business-case.md` | 1h |
+| 2.3 | Tạo 2 dashboards: 1 cho chủ shop (non-tech), 1 cho dev | 2h |
+| 2.4 | 2 alert rules + webhook dịch alert → TV | 1.5h |
+| 2.5 | Model card: 5 sample alerts hệ thống sẽ fire trong tuần | 1h |
+
+**Deliverables:**
+- `bonus/business-case.md`
+- 2 `dashboards/*.json`
+- Webhook-receiver script
+
+---
+
+### 13.4 Provocation 3 — Drift detection trên dataset Việt thật
+
+| Bước | Hành động | Thời gian |
+|:----:|:----------|:---------:|
+| 3.1 | Chọn dataset (VnExpress headlines, Lazada reviews, weather...) | 30min |
+| 3.2 | Viết `bonus/dataset-card.md` | 1h |
+| 3.3 | Build `drift/pipeline.py`: fetch → detect → emit Prometheus metrics | 2h |
+| 3.4 | Grafana dashboard + 1 alert rule | 1.5h |
+| 3.5 | Reflection: PSI vs KL vs KS — cái nào surface shift sớm nhất? | 1h |
+
+**Deliverables:**
+- `bonus/dataset-card.md`
+- `drift/pipeline.py`
+- Dashboard + alert
+- Reflection về PSI/KL/KS
+
+---
+
+### 13.5 Provocation 4 — Cost observability model thật
+
+| Bước | Hành động | Thời gian |
+|:----:|:----------|:---------:|
+| 4.1 | Instrument client wrapper (OpenAI SDK / llama.cpp) | 1h |
+| 4.2 | Dashboard `$/request`, `$/day`, `$/user` | 1.5h |
+| 4.3 | 2 alerts: (a) burn-rate vs budget, (b) per-request anomaly | 1h |
+| 4.4 | Tóm tắt 1 trang: 7 ngày cost data, top 3 endpoints | 1h |
+
+**Deliverables:**
+- Client wrapper đã instrument (`tokens_input`, `tokens_output`, `cost_usd`, `model`)
+- Dashboard JSON
+- Cost summary report
+
+---
+
+### 13.6 Provocation 5 — Diễn tập postmortem (Chaos Engineering)
+
+| Bước | Hành động | Thời gian |
+|:----:|:----------|:---------:|
+| 5.1 | Chọn 3 failure modes (infra + data + dependency) | 30min |
+| 5.2 | Viết 3 chaos scripts trong `bonus/chaos/` | 2h |
+| 5.3 | Inject từng failure, đo time-to-detect + time-to-mitigate | 2h |
+| 5.4 | Viết 3 postmortems (`bonus/postmortems/incident-NN.md`) | 2h |
+| 5.5 | Implement ít nhất 1 action item (thay đổi dashboard/alert thật) | 1.5h |
+
+**Postmortem template (deck §12):**
+1. Timeline
+2. Detection (thời điểm + signal)
+3. Mitigation
+4. Root Cause
+5. Action Items (có ít nhất 1 item đã implement)
+
+---
+
+### 13.7 Bonus submission checklist
+
+```
+bonus/
+├── REFLECTION.md          # 2 đoạn: bạn ngạc nhiên gì? thêm 8h bạn build gì?
+├── <provocation-folder>/  # Deliverables của provocation đã chọn
+└── screenshots/           # Dashboard, alert fire, postmortem timeline
+```
+
+### 13.8 Đo độ thành công (từ BONUS-CHALLENGE.md)
+
+| # | Câu hỏi tự kiểm | Trả lời được? |
+|:-:|:----------------|:-------------:|
+| 1 | 3 metrics nào bạn thật sự xem đầu tiên khi có incident? Vì sao? | ⬜ |
+| 2 | Failure mode không hiển nhiên mà default alert không bắt được? | ⬜ |
+| 3 | PSI vs KL vs KS — cái nào surface shift sớm nhất trên dataset của bạn? | ⬜ |
+| 4 | Leading indicator của runaway-cost là gì? | ⬜ |
+| 5 | Time-to-detect lần inject thứ 2 có ngắn hơn lần 1 không? | ⬜ |
+| 6 | Postmortem của bạn dẫn tới thay đổi thật gì trong system? | ⬜ |
+
+> **Bonus này ungraded vì:** khoảnh khắc đặt điểm vào, bạn sẽ tối ưu cho điểm. Kỹ năng cần phát triển là **judgment** — cái gì đáng alert, cái gì không, đánh thức ai, khi nào, vì sao.
 
 ---
 
