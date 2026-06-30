@@ -20,8 +20,10 @@
 | 05 | Cross-Day Integration | ✅ Hoàn thành | 10/10 |
 | Bonus | AgentOps | ✅ Hoàn thành | +10 |
 | Bonus | eBPF Profiling | ✅ Hoàn thành | +10 |
-| Bonus | Langfuse | ⬜ Chưa làm | 0/10 |
-| **Tổng** | | **6/7 tracks + 2 bonus** | **120/130** ✅ |
+| Bonus | Langfuse | ✅ Hoàn thành | +10 |
+| **Tổng** | | **6/7 tracks + 3 bonus** | **130/130** 🎉 |
+
+**🏆 ALL BONUS COMPLETE — 130/130 điểm tối đa**
 
 ### Screenshots đã có trong submission/
 
@@ -39,13 +41,16 @@
 | `jaeger-trace.png` | ✅ |
 | `agentops-jaeger.png` | ✅ |
 | `pyroscope-flamegraph.png` | ✅ |
+| `langfuse-trace.png` | ✅ |
 
-### ✅ Tất cả screenshots đã hoàn thành
+### 🎉 Tất cả 16 screenshots đã hoàn thành
 
 ### Công việc còn lại
 
-1. ✔️ Chạy `make verify` kiểm tra lần cuối
-2. 🎯 (Optional) Bonus tracks
+1. ~~Chạy `make verify`~~ ✅ Đã pass
+2. ~~Bonus tracks~~ ✅ Hoàn thành cả 3
+
+**🎉 LAB COMPLETE — 130/130**
 
 ---
 

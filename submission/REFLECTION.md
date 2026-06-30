@@ -4,7 +4,7 @@
 **Mã số học viên:** 2A202600786
 **Submission date:** 2026-06-30
 **Lab repo URL:** _[public GitHub URL]_
-**Current progress:** 100/100 core points ✅ | All screenshots done | Ready to submit
+**Current progress:** 130/130 🎉 | All 3 bonuses complete | Lab fully done
 
 ---
 
@@ -21,7 +21,7 @@
 | **Total Core** | | **100/100** | ✅ **HOÀN THÀNH** |
 | Bonus (AgentOps) | ✅ | +10/10 | 4 tasks, 3 failure modes, wrong-tool extension |
 | Bonus (eBPF Profiling) | ✅ | +10/10 | Pyroscope flame graph for day23-app |
-| Bonus (Langfuse) | ⬜ | 0/10 | Optional |
+| Bonus (Langfuse) | ✅ | +10/10 | Self-hosted, mock LLM trace, model+tokens+cost |
 
 ### ✅ Tất cả đã hoàn thành — sẵn sàng `make verify`
 
@@ -212,7 +212,32 @@ SLI tôi sẽ alert đầu tiên: **`loops_detected`** — vì loop vừa đốt
 
 ---
 
-## 8. The single change that mattered most
+## 8. BONUS — LLM-Native Observability (Langfuse, +10 điểm)
+
+### Implementation
+
+- Self-hosted Langfuse (6 containers: ClickHouse + Postgres + Redis + MinIO + web + worker)
+- Created organization `aicb-day23` + project `day23-llm-trace` + API keys
+- Wrote `trace_llm.py` (~40 dòng) sử dụng `@observe(as_type="generation")` decorator từ langfuse SDK v4
+- Mock LLM call (gpt-4o-mini, 11 in + 35 out tokens, $0.000023, 152ms latency)
+
+### LLM-native signals RED monitoring bỏ lỡ
+
+| Signal | RED có bắt được? | Vì sao quan trọng |
+|:-------|:---------------:|:------------------|
+| **Token cost per request** | ❌ | RED đo latency + error rate, không đo cost. Một request 200 OK có thể đốt $5 nếu prompt dài. |
+| **Token usage (input vs output)** | ❌ | RED không phân biệt được prompt-engineering bloat vs legitimate long output. Cần `gen_ai.usage.input_tokens` / `output_tokens` riêng. |
+| **Model-level latency breakdown** | ⚠️ Một phần | RED có P95 latency, nhưng không tách được embedding latency vs generation latency vs tool-call overhead. |
+
+**Signal quan trọng nhất bị bỏ lỡ:** **Token cost per request**. Với RED monitoring, bạn biết request nhanh hay chậm. Với Langfuse, bạn biết request đó tốn bao nhiêu tiền — và có thể phát hiện prompt-engineering regression (prompt dài gấp 3 → cost ×3) trước khi nó thành vấn đề budget.
+
+### Output
+- `submission/screenshots/langfuse-trace.png` — Langfuse trace hiển thị model + tokens + cost + latency
+- `.env` — Lưu LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY, login info
+
+---
+
+## 9. The single change that mattered most
 
 The single most impactful change was **adding uid labels to the Grafana datasource provisioning**.
 

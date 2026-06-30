@@ -1,0 +1,20 @@
+# docker-compose.override.yml — auto-merged by Compose
+# Adds Pyroscope + Alloy (eBPF profiler) for BONUS-ebpf-profiling
+
+services:
+  pyroscope:
+    image: grafana/pyroscope:1.14.0
+    container_name: day23-pyroscope
+    ports:
+      - "127.0.0.1:4040:4040"
+    networks: [obs]
+
+  alloy:
+    image: grafana/alloy:v1.10.0
+    container_name: day23-alloy
+    privileged: true
+    pid: "host"
+    volumes:
+      - ./BONUS-ebpf-profiling/alloy-ebpf.river:/etc/alloy/config.river:ro
+    command: ["run", "/etc/alloy/config.river"]
+    networks: [obs]

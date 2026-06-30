@@ -1,0 +1,21 @@
+// alloy-ebpf.river — Zero-code eBPF continuous profiling for day23-app
+// Maps to deck §9 (eBPF, Continuous Profiling & Observability 2.0)
+
+discovery.process "all" {
+  discover_config {
+    cgroup = true
+    refresh_interval = "60s"
+  }
+}
+
+pyroscope.ebpf "default" {
+  forward_to = [pyroscope.write.local.receiver]
+  targets    = discovery.process.all.targets
+  demoSettings {
+    enabled = false
+  }
+}
+
+pyroscope.write "local" {
+  endpoint { url = "http://pyroscope:4040" }
+}
