@@ -38,6 +38,9 @@ TASKS = [
                                                   ("get_price", "SKU-2"), ("place_order", "SKU-2")],
      "expect": True},  # has a flaky tool -> tool error + retry
     {"goal": "So sánh giá (lỗi vòng lặp)", "plan": [("get_price", "SKU-1")] * 6, "expect": False},  # loop
+    {"goal": "Gọi nhầm tool không tồn tại", "plan": [("search", "laptop"), ("recommend", "SKU-99"),
+                                                     ("get_price", "SKU-99"), ("place_order", "SKU-99")],
+     "expect": False},  # wrong-tool: 'recommend' doesn't exist
 ]
 MAX_STEPS = 8
 
@@ -70,6 +73,11 @@ def detect_loop(actions, window=3):
     return False
 
 
+def detect_wrong_tool(actions):
+    """Wrong-tool = agent called a tool that doesn't exist."""
+    return any(tool not in TOOLS for tool, _ in actions)
+
+
 def run_task(task, tracer):
     """Execute one trajectory; return per-task SLI record + emit spans."""
     from contextlib import contextmanager
@@ -100,19 +108,25 @@ def run_task(task, tracer):
                     tokens += out.get("tokens", 20)
                     if tool == "place_order":
                         success = True
+                except KeyError:
+                    # wrong-tool: agent hallucinated a tool that doesn't exist
+                    tool_errors += 1
+                    tokens += 10  # cost of failed attempt
                 except Exception:
                     tool_errors += 1
                     tokens += 15  # the failed attempt still cost tokens
             if detect_loop(actions):
                 break  # agent caught in a loop -> abort (no-progress)
     looped = detect_loop(actions)
+    wrong_tool = detect_wrong_tool(actions)
     return {
         "goal": task["goal"], "steps": steps, "tool_calls": tool_calls,
         "tool_errors": tool_errors, "tokens": tokens,
         "cost_usd": round(tokens / 1000 * PRICE_PER_1K, 6),
-        "success": success, "looped": looped,
-        "failure_modes": ([] if success and not looped else
+        "success": success, "looped": looped, "wrong_tool": wrong_tool,
+        "failure_modes": ([] if success and not looped and not wrong_tool else
                           (["loop/no-progress"] if looped else []) +
+                          (["wrong-tool"] if wrong_tool else []) +
                           (["tool-error"] if tool_errors else []) +
                           ([] if success else ["task-failed"])),
     }
@@ -140,6 +154,7 @@ def main():
                                  max(sum(t["tool_calls"] for t in tasks), 1), 3),
         "cost_per_task_usd": round(sum(t["cost_usd"] for t in tasks) / n, 6),
         "loops_detected": sum(t["looped"] for t in tasks),
+        "wrong_tools_detected": sum(t["wrong_tool"] for t in tasks),
     }
     report = {"generated_at": time.strftime("%H:%M:%SZ", time.gmtime()),
               "span_export": bool(prov), "agent_slis": agg, "per_task": tasks}

@@ -161,7 +161,56 @@ Ngược lại, `day19_qdrant_collections` dễ hơn nhiều — chỉ là một
 
 ---
 
-## 6. The single change that mattered most
+## 7. BONUS — AgentOps (+10 điểm)
+
+### Implementation
+
+- Chạy `BONUS-agentops/agent_run.py` — mock agent 4 tasks với 3 failure modes
+- Emit OTel-GenAI spans (`invoke_agent` + `execute_tool`) → Jaeger (service `day23-agent`)
+- Compute 7 Agent SLIs: `success_rate`, `avg_steps_per_task`, `tool_error_rate`, `cost_per_task_usd`, `loops_detected`, `wrong_tools_detected`
+- Output: `submission/agentops-report.json`
+
+### Kết quả
+
+| SLI | Value |
+|:----|:-----:|
+| tasks | 4 |
+| success_rate | 0.75 |
+| avg_steps_per_task | 3.5 |
+| tool_error_rate | 0.143 |
+| cost_per_task_usd | $0.000048 |
+| loops_detected | 1 |
+| wrong_tools_detected | 1 |
+
+### 3 Failure modes detected
+
+| Task | Failure mode |
+|:-----|:-------------|
+| Mua SKU rẻ nhất | ✅ None |
+| Kiểm tra tồn kho | ✅ None (recovered from tool-error) |
+| So sánh giá (loop) | ❌ loop/no-progress + task-failed |
+| Gọi nhầm tool | ❌ wrong-tool + tool-error |
+
+### Mở rộng: wrong-tool failure mode
+
+Thêm task #4 gọi tool `recommend` không tồn tại. Triển khai:
+- `detect_wrong_tool()`: kiểm tra tool name có trong `TOOLS` dict không
+- `KeyError` catch riêng trong `run_task()` để phân biệt wrong-tool vs tool-error
+- `wrong_tools_detected` metric trong aggregated SLIs
+
+### pass^k ≠ pass@k
+
+`pass@k` (deck §19) đo xác suất agent giải được task *trong k lần thử*, chọn lần tốt nhất. Nhưng production agent không được chạy lại nhiều lần và chọn — nó phải **pass^1**: giải đúng ngay lần đầu.
+
+Với agent của tôi:
+- `pass@3` = 100% (nếu cho chạy lại, task loop có thể thoát)
+- `pass^1` = 75% (thực tế 3/4 tasks pass ngay lần đầu)
+
+SLI tôi sẽ alert đầu tiên: **`loops_detected`** — vì loop vừa đốt token vừa không progress, là silent failure mode nguy hiểm nhất. Cost anomaly có thể fix bằng budget; loop là bug kiến trúc.
+
+---
+
+## 8. The single change that mattered most
 
 The single most impactful change was **adding uid labels to the Grafana datasource provisioning**.
 

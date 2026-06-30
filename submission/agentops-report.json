@@ -1,0 +1,69 @@
+{
+  "generated_at": "13:06:00Z",
+  "span_export": true,
+  "agent_slis": {
+    "tasks": 4,
+    "success_rate": 0.75,
+    "avg_steps_per_task": 3.5,
+    "tool_error_rate": 0.143,
+    "cost_per_task_usd": 4.8e-05,
+    "loops_detected": 1,
+    "wrong_tools_detected": 1
+  },
+  "per_task": [
+    {
+      "goal": "Mua SKU r\u1ebb nh\u1ea5t",
+      "steps": 3,
+      "tool_calls": 3,
+      "tool_errors": 0,
+      "tokens": 95,
+      "cost_usd": 4.8e-05,
+      "success": true,
+      "looped": false,
+      "wrong_tool": false,
+      "failure_modes": []
+    },
+    {
+      "goal": "Ki\u1ec3m tra t\u1ed3n kho r\u1ed3i mua",
+      "steps": 4,
+      "tool_calls": 4,
+      "tool_errors": 1,
+      "tokens": 110,
+      "cost_usd": 5.5e-05,
+      "success": true,
+      "looped": false,
+      "wrong_tool": false,
+      "failure_modes": []
+    },
+    {
+      "goal": "So s\u00e1nh gi\u00e1 (l\u1ed7i v\u00f2ng l\u1eb7p)",
+      "steps": 3,
+      "tool_calls": 3,
+      "tool_errors": 0,
+      "tokens": 75,
+      "cost_usd": 3.7e-05,
+      "success": false,
+      "looped": true,
+      "wrong_tool": false,
+      "failure_modes": [
+        "loop/no-progress",
+        "task-failed"
+      ]
+    },
+    {
+      "goal": "G\u1ecdi nh\u1ea7m tool kh\u00f4ng t\u1ed3n t\u1ea1i",
+      "steps": 4,
+      "tool_calls": 4,
+      "tool_errors": 1,
+      "tokens": 105,
+      "cost_usd": 5.3e-05,
+      "success": true,
+      "looped": false,
+      "wrong_tool": true,
+      "failure_modes": [
+        "wrong-tool",
+        "tool-error"
+      ]
+    }
+  ]
+}
