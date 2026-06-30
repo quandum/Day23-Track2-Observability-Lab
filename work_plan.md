@@ -18,8 +18,9 @@
 | 03 | Tracing & Logs | ✅ Hoàn thành | 20/20 |
 | 04 | Drift Detection | ✅ Hoàn thành | 15/15 |
 | 05 | Cross-Day Integration | ✅ Hoàn thành | 10/10 |
-| Bonus | eBPF / Langfuse / AgentOps | ⬜ Chưa bắt đầu | 0/30 |
-| **Tổng** | | **6/7 tracks** | **100/100** ✅ |
+| Bonus | AgentOps | ✅ Hoàn thành | +10 |
+| Bonus | eBPF / Langfuse | ⬜ Chưa làm | 0/20 |
+| **Tổng** | | **6/7 tracks + 1 bonus** | **110/130** ✅ |
 
 ### Screenshots đã có trong submission/
 
@@ -35,8 +36,7 @@
 | `grafana-dashboards-api.json` | ✅ |
 | `cross-day-dashboard.png` | ✅ |
 | `jaeger-trace.png` | ✅ |
-| `jaeger-attrs.png` | ✅ |
-| `drift-report.png` | ✅ |
+| `agentops-jaeger.png` | ✅ |
 
 ### ✅ Tất cả screenshots đã hoàn thành
 
