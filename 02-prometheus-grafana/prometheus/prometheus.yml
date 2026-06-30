@@ -39,3 +39,13 @@ scrape_configs:
   #   static_configs:
   #     - targets: ['host.docker.internal:8080']
   #   metrics_path: /metrics
+
+  # Day 19 stub (cross-day integration)
+  - job_name: 'day19-stub'
+    static_configs:
+      - targets: ['host.docker.internal:9101']
+
+  # Day 20 stub (cross-day integration)
+  - job_name: 'day20-stub'
+    static_configs:
+      - targets: ['host.docker.internal:9102']

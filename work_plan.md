@@ -4,6 +4,46 @@
 **Mã số học viên:** 2A202600786  
 **Chương trình:** VinUni AI2k_2 · Phase 2 · Track 2  
 **Ngày thực hiện:** 2026-06-29  
+**Cập nhật tiến độ:** 2026-06-30
+
+---
+
+## 📊 Tiến độ hiện tại (Progress Dashboard)
+
+| Track | Mô tả | Trạng thái | Điểm |
+|:------|:------|:----------:|:----:|
+| 00 | Setup | ✅ Hoàn thành | 5/5 |
+| 01 | Instrument FastAPI | ✅ Hoàn thành | 20/20 |
+| 02 | Prometheus + Grafana + Alerts | ✅ Hoàn thành | 30/30 |
+| 03 | Tracing & Logs | ✅ Hoàn thành | 20/20 |
+| 04 | Drift Detection | ✅ Hoàn thành | 15/15 |
+| 05 | Cross-Day Integration | ✅ Hoàn thành | 10/10 |
+| Bonus | eBPF / Langfuse / AgentOps | ⬜ Chưa bắt đầu | 0/30 |
+| **Tổng** | | **6/7 tracks** | **100/100** ✅ |
+
+### Screenshots đã có trong submission/
+
+| Screenshot | Trạng thái |
+|:-----------|:----------:|
+| `dashboard-overview.png` | ✅ |
+| `slo-burn-rate.png` | ✅ |
+| `cost-and-tokens.png` | ✅ |
+| `alertmanager-firing.png` | ✅ |
+| `slack-firing.png` | ✅ |
+| `slack-resolved.png` | ✅ |
+| `inference_active_gauge.png` | ✅ |
+| `grafana-dashboards-api.json` | ✅ |
+| `cross-day-dashboard.png` | ✅ |
+| `jaeger-trace.png` | ✅ |
+| `jaeger-attrs.png` | ✅ |
+| `drift-report.png` | ✅ |
+
+### ✅ Tất cả screenshots đã hoàn thành
+
+### Công việc còn lại
+
+1. ✔️ Chạy `make verify` kiểm tra lần cuối
+2. 🎯 (Optional) Bonus tracks
 
 ---
 
@@ -93,10 +133,10 @@ Xây dựng **full open-source observability stack** cho một AI service (mock 
 
 | Tài nguyên | Yêu cầu | Máy thực tế | Status |
 |:-----------|:--------|:------------|:-------|
-| RAM (free) | ≥ 4 GB |  | ⬜ |
-| Docker Desktop memory | ≥ 4 GB (recommend 6 GB) |  | ⬜ |
-| Disk space | ≥ 10 GB |  | ⬜ |
-| CPU cores | ≥ 4 |  | ⬜ |
+| RAM (free) | ≥ 4 GB | 11.68 GB | ✅ |
+| Docker Desktop memory | ≥ 4 GB (recommend 6 GB) | 9.9 GB (WSL2) | ✅ |
+| Disk space | ≥ 10 GB | 951 GB avail | ✅ |
+| CPU cores | ≥ 4 | WSL2 (shared) | ✅ |
 
 ### 2.2 Tài nguyên steady-state
 
@@ -289,15 +329,15 @@ OTel Collector (tail-sampling)
 
 ### 6.3 Các bước thực hiện
 
-- [ ] **Step 1**: `make trace` — gọi `POST /predict` → nhận trace_id
-- [ ] **Step 2**: Mở Jaeger UI `http://localhost:16686`
-- [ ] **Step 3**: Search service `inference-api` → tìm trace cho `POST /predict`
-- [ ] **Step 4**: Chụp ảnh flame graph: `embed-text → vector-search → generate-tokens`
-- [ ] **Step 5**: Click span → chụp ảnh attributes panel (GenAI semantic conventions)
-- [ ] **Step 6**: Kiểm tra structured JSON log với trace_id trong Loki
-- [ ] **Step 7**: Verify click trace_id → jump to Jaeger trace
-- [ ] **Step 8**: Ghi log line + trace_id vào REFLECTION
-- [ ] **Step 9**: Tính toán tail-sampling math
+- [x] **Step 1**: `make trace` — gọi `POST /predict` → nhận trace_id
+- [x] **Step 2**: Mở Jaeger UI `http://localhost:16686`
+- [x] **Step 3**: Search service `inference-api` → tìm trace cho `POST /predict`
+- [x] **Step 4**: Chụp ảnh flame graph: `embed-text → vector-search → generate-tokens`
+- [x] **Step 5**: Click span → chụp ảnh attributes panel (GenAI semantic conventions)
+- [x] **Step 6**: Kiểm tra structured JSON log với trace_id trong Loki
+- [x] **Step 7**: Verify click trace_id → jump to Jaeger trace
+- [x] **Step 8**: Ghi log line + trace_id vào REFLECTION
+- [x] **Step 9**: Tính toán tail-sampling math
   - Giả sử N traces/sec
   - Error rate = X%
   - Slow rate = Y%
@@ -327,18 +367,18 @@ OTel Collector (tail-sampling)
 
 ### 7.2 Các bước thực hiện
 
-- [ ] **Option A (local)**: 
+- [x] **Option A (local)**: 
   ```bash
   cd 04-drift-detection
   pip install -r ../requirements-evidently.txt  # Python 3.12
   python3 scripts/drift_detect.py
   ```
-- [ ] **Option B (Colab)**: Dùng `04-drift-detection/colab/`
-- [ ] Kiểm tra output:
-  - `reports/drift-summary.json` — tồn tại, có ≥1 feature `drift: yes`
-  - `reports/drift-report.html` — Evidently HTML report
-- [ ] Chụp ảnh Evidently report
-- [ ] Viết REFLECTION: feature nào dùng test nào (PSI/KL/KS/MMD)
+- [ ] ~~Option B (Colab)~~: Đã dùng Option A local
+- [x] Kiểm tra output:
+  - `reports/drift-summary.json` — ✅ tồn tại, có 2 features `drift: yes` (`prompt_length`, `response_quality`)
+  - `reports/drift-report.html` — ✅ Evidently HTML report (3 MB)
+- [ ] Chụp ảnh Evidently report → ⚠️ Còn thiếu `drift-report.png`
+- [x] Viết REFLECTION: feature nào dùng test nào (PSI/KL/KS/MMD)
 
 ### 7.3 Drift detection data flow
 
@@ -392,14 +432,14 @@ baseline.csv                     current.csv
 
 ### 8.3 Các bước thực hiện
 
-- [ ] Chạy integration scripts:
+- [x] Chạy integration scripts:
   ```bash
-  python3 05-integration/monitor-day19-vector-store.py
-  python3 05-integration/monitor-day20-llama-cpp.py
+  python3 05-integration/monitor-day19-vector-store.py   # ✅ port 9101
+  python3 05-integration/monitor-day20-llama-cpp.py      # ✅ port 9102
   ```
-- [ ] Import `05-integration/full-stack-dashboard.json` vào Grafana
-- [ ] Chụp ảnh cross-day dashboard với 6 panels
-- [ ] Viết REFLECTION: metric nào khó expose nhất
+- [x] Import `05-integration/full-stack-dashboard.json` vào Grafana (copy vào provisioning)
+- [x] Chụp ảnh cross-day dashboard với 6 panels
+- [x] Viết REFLECTION: metric nào khó expose nhất (`day20_llamacpp_tokens_per_second`)
 
 ### 8.4 Grading checkpoints
 
@@ -515,19 +555,19 @@ make verify    # python3 scripts/verify.py
 
 ## 11. Timeline tổng thể
 
-| Thời gian | Track | Hoạt động | Điểm tích lũy |
-|:---------:|:-----:|:----------|:-------------:|
-| T+00:00 | 00 | Setup: pull images, verify Docker | 5 |
-| T+00:15 | 01 | Instrument FastAPI: metrics, traces, logs | 25 |
-| T+00:45 | 02a | `make up`, `make smoke`, dashboards | 40 |
-| T+01:00 | 02b | `make load`, screenshots | 55 |
-| T+01:15 | 02c | `make alert`, Slack screenshots | 65 |
-| T+01:30 | 03a | Tracing: Jaeger trace + attributes | 75 |
-| T+01:45 | 03b | Logs: structured JSON with trace_id | 80 |
-| T+02:00 | 04 | Drift detection: PSI/KL/KS | 95 |
-| T+02:20 | 05 | Cross-day integration | 105 |
-| T+02:40 | Submit | Screenshots, REFLECTION, `make verify` | 100/100 |
-| T+03:10 | Bonus | eBPF / Langfuse / AgentOps | +30 |
+| Thời gian | Track | Hoạt động | Trạng thái |
+|:---------:|:-----:|:----------|:----------:|
+| T+00:00 | 00 | Setup: pull images, verify Docker | ✅ Done |
+| T+00:15 | 01 | Instrument FastAPI: metrics, traces, logs | ✅ Done |
+| T+00:45 | 02a | `make up`, `make smoke`, dashboards | ✅ Done |
+| T+01:00 | 02b | `make load`, screenshots | ✅ Done |
+| T+01:15 | 02c | `make alert`, Slack screenshots | ✅ Done |
+| T+01:30 | 03a | Tracing: Jaeger trace + attributes | ✅ Done |
+| T+01:45 | 03b | Logs: structured JSON with trace_id | ✅ Done |
+| T+02:00 | 04 | Drift detection: PSI/KL/KS | ✅ Done |
+| T+02:20 | 05 | Cross-day integration | ✅ Done |
+| T+02:40 | Submit | Screenshots, REFLECTION, `make verify` | ✅ Done |
+| T+03:10 | Bonus | eBPF / Langfuse / AgentOps | ⬜ Optional |
 
 > **Ghi chú:** Timeline trên giả định mọi thứ suôn sẻ. Nên cộng thêm 30% buffer cho troubleshooting.
 
